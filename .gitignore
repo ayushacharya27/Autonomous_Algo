@@ -1,0 +1,9 @@
+# --- Environments ---
+algo_env/
+env/
+venv/
+.env
+
+# --- Python ---
+__pycache__/
+*.pyc
