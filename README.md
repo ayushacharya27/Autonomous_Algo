@@ -25,7 +25,7 @@ It Uses Convolutional layers instead of Dense Layers to extract the feautures fr
 Parameters:
 Currently the Latent_dim is set to 16*16, we can make it smaller by adding more convolutional layers into the moedel architecture.
 
-UPDATE (JAN 4, 2026): Tried Experimenting by reducing the bottleneck to 4*4*512, Recontruction was bad so left it, Switching back to the old dim with 16*16*128.
+UPDATE (JAN 4, 2026): Tried Experimenting by reducing the bottleneck to 4x4x512, Recontruction was bad so left it, Switching back to the old dim with 16x16x128.
 
 NEW PLANNED (JAN 4, 2026): First Lets Create the Vector Database to Extract the Data From, and then updating the model to new arch, such as denoising or variational.
 
