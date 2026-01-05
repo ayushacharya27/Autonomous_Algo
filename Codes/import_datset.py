@@ -15,7 +15,10 @@ def preprocess_dataset(folder_path):
             img = cv2.imread(img_path, 0)
 
             if img is not None:
-                img = cv2.resize(img,(128,128))
+                #img = cv2.resize(img,(128,128))
+                # Changing Size to 256*256
+                img = cv2.resize(img,(256,256))
+
                 images.append(img)
         else:
             pass

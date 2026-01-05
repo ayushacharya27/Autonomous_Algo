@@ -14,10 +14,17 @@ class ConvAutoencoder(tf.keras.Model):
     def __init__(self):
         super(ConvAutoencoder, self).__init__()
 
+        # Updated to 256 by 256
         # Now using 128 by 128 but in future well change it to 256 by 256 for more quality Reconstruction 
         self.encoder = tf.keras.Sequential([
-            layers.Input(shape=(128, 128, 1)),
-            
+            #layers.Input(shape=(128, 128, 1)),
+
+            # New Input
+            layers.Input(shape=(256, 256, 1)),
+
+            # Adding one More convolutional layer
+            layers.Conv2D(16, (3,3), strides=2, padding='same', activation='relu'),
+
             # Block 1: 128 -> 64
             layers.Conv2D(32, (3,3), strides=2, padding='same', activation='relu'),
             
@@ -43,6 +50,9 @@ class ConvAutoencoder(tf.keras.Model):
             
             # Un-Block 1: 64 -> 128
             layers.Conv2DTranspose(32, (3,3), strides=2, padding='same', activation='relu'),
+
+            # Adding one More convolutional layer
+            layers.Conv2DTranspose(16, (3,3), strides=2, padding='same', activation='relu'),
             
             # Output Layer (Sigmoid for 0-1 pixel values)
             layers.Conv2D(1, (3,3), padding='same', activation='sigmoid')
@@ -66,11 +76,11 @@ def train_step(images):
     return loss
 
 # Batch size can be smaller for larger images
-batch_size = 32 
+batch_size = 4 
 train_ds = tf.data.Dataset.from_tensor_slices(x_train).shuffle(1000).batch(batch_size)
 
 # Training Starts 
-for epoch in range(500):
+for epoch in range(100):
     for batch in train_ds:
         loss = train_step(batch)
     print(f"Epoch {epoch+1} | loss = {loss.numpy():.4f}")
