@@ -47,6 +47,8 @@ mkdir Federated_Learning
 ```
 Started Coding.
 
+**UPDATE (Jan 19, 2026, 04:15 AM)**:  Implemented the Strategy using FLOWR, needs 2 clients, but can override it so no worries. Just sending data to LLM is left and then Hardware Implementaion will be done.
+
 
 ### 3. test_(final).py
 For Testing the Accuracy of the Model, always use this, make sure to add the **kwargs thingy to the end.
