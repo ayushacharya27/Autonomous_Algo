@@ -72,7 +72,7 @@ class AyushClient(fl.client.NumPyClient):
         for batch in train_ds:
             loss = train_step(batch)
 
-        print(f"Local Training Donee!! | loss={loss.numpy():.4f}")
+        print(f"Local Training Doneeeee!! | loss={loss.numpy():.4f}")
 
         return model.get_weights(), len(x_train), {}
 
