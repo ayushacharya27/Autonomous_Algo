@@ -51,6 +51,8 @@ Started Coding.
 
 **UPDATE (Feb 13, 2026, 10:07 AM)**: Succesfully demonstrated the Working of Federated Learning Architecture to the CPSD teacher and now to ML Teacher.  
 
+**UPDATE (Feb 19, 2026, 10:52 PM)**: Added 5 New classes to it with dirty road, clean road,.....etc, and finally completed the software part of this project. 
+
 
 ### 3. test_(final).py
 For Testing the Accuracy of the Model, always use this, make sure to add the **kwargs thingy to the end.
