@@ -3,6 +3,8 @@ import numpy as np
 import cv2
 from tensorflow.keras.models import load_model
 from tensorflow.keras import layers
+import json
+import google.generativeai as genai
 
 
 
@@ -46,8 +48,19 @@ encoder = model.encoder
 
 
 # Saved Signatures
-signatures = {
+'''signatures = {
     "flood": np.load("flood_signature.npy"),
+    # add more later
+}'''
+
+signatures = {
+    "dirty_road": np.load("/home/ayush/Autonomous_Algo/Latent_layer/Signatures/dirtyroad_signature.npy"),
+    "flood": np.load("/home/ayush/Autonomous_Algo/Latent_layer/Signatures/flood_signature.npy"),
+    "clean_road": np.load("/home/ayush/Autonomous_Algo/Latent_layer/Signatures/cleanroad_signature.npy"),
+    "pedestrian_road": np.load("/home/ayush/Autonomous_Algo/Latent_layer/Signatures/pedestrianroad_signature.npy"),
+    "pothole_road": np.load("/home/ayush/Autonomous_Algo/Latent_layer/Signatures/pothole_signature.npy"),
+
+    
     # add more later
 }
 
@@ -77,7 +90,7 @@ def get_latent(img_path):
 
 # image_path
 
-img_path = "/home/ayush/Autonomous_Algo/black.png"
+img_path = "/home/ayush/Autonomous_Algo/flooded_road_test3.jpg"
 
 latent = get_latent(img_path)
 
@@ -94,3 +107,150 @@ for cname, sig in signatures.items():
 
 print("\nPredicted:", best_class)
 print("Score:", best_score)
+
+
+
+# LLM Handling
+scene_report = {
+    "vehicle_id": "AV_01",
+    "scene_analysis": {
+        "predicted_event": best_class,
+        "confidence": float(best_score),
+        "anomaly_score": float(1 - best_score)
+    },
+    "vehicle_state": {
+        "current_speed_kmph": 45, # Hard Coded
+        "Steering_Curvature": +90
+    }
+}
+
+# System Prompt
+def build_prompt(scene_report):
+    return f"""
+You are an autonomous vehicle control planner.
+
+Your task:
+Based on the scene data, Return at least 2 coordinated control actions whenever risk is moderate or high.
+Prioritize layered safety strategies.
+
+
+STRICT RULES:
+- Return ONLY valid JSON.
+- Do NOT include explanations.
+- Do NOT include markdown.
+- Do NOT include comments.
+- Do NOT include any text outside JSON.
+- Only use actions from the allowed list.
+- If no action is required, return an empty list.
+
+Allowed actions:
+- reduce_speed
+- emergency_brake
+- increase_following_distance
+- adjust_steering
+- maintain_speed
+
+Required JSON format:
+
+{{
+  "recommended_actions": [
+    {{
+      "action": "<one_of_allowed_actions>",
+      "parameters": {{
+        "target_speed_kmph": <number_optional>,
+        "steering_adjustment_deg": <number_optional>,
+        "intensity": "<low|medium|high_optional>"
+      }}
+    }}
+  ]
+}}
+
+Scene Data:
+{json.dumps(scene_report, indent=2)}
+"""
+
+
+GEMINI_API_KEY="AIzaSyCcTp6gznre2imq_ZrKsqGHfcoGqkygyMg"
+genai.configure(api_key=GEMINI_API_KEY)
+
+
+def get_model():
+    return genai.GenerativeModel("gemini-2.5-flash")
+
+
+prompt = build_prompt(scene_report)
+model = get_model()
+response = model.generate_content(prompt)
+
+def parse_llm_response(response_text):
+    try:
+        cleaned = response_text.strip()
+
+        # Remove markdown fences safely
+        if cleaned.startswith("```"):
+            cleaned = cleaned.replace("```json", "")
+            cleaned = cleaned.replace("```", "")
+            cleaned = cleaned.strip()
+
+        data = json.loads(cleaned)
+
+        # Required top-level field
+        if "recommended_actions" not in data:
+            raise ValueError("Missing recommended_actions")
+
+        # Allowed actions
+        allowed_actions = {
+            "reduce_speed",
+            "emergency_brake",
+            "increase_following_distance",
+            "adjust_steering",
+            "activate_traction_control",
+            "maintain_speed"
+        }
+
+        # Validate each action
+        validated_actions = []
+        for action_obj in data["recommended_actions"]:
+
+            if "action" not in action_obj:
+                continue
+
+            if action_obj["action"] not in allowed_actions:
+                continue
+
+            # Ensure parameters exists
+            if "parameters" not in action_obj:
+                action_obj["parameters"] = {}
+
+            validated_actions.append(action_obj)
+
+        return {
+            "recommended_actions": validated_actions
+        }
+
+    except Exception as e:
+        print("LLM parsing failed:", e)
+
+        # Safe fallback behavior
+        return {
+            "recommended_actions": [
+                {
+                    "action": "reduce_speed",
+                    "parameters": {
+                        "target_speed_kmph": 15,
+                        "intensity": "high"
+                    }
+                }
+            ]
+        }
+
+
+analysis_json = parse_llm_response(response.text)
+print(analysis_json)
+
+#print(response.text)
+
+
+
+
+

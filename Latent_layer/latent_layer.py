@@ -5,6 +5,11 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras import layers
 
 
+# Enabling GPU Growth
+gpus = tf.config.list_physical_devices('GPU')
+if gpus:
+    for gpu in gpus:
+        tf.config.experimental.set_memory_growth(gpu, True)
 
 Strides = 2
 
@@ -47,13 +52,23 @@ model = load_model(
 encoder = model.encoder
 
 # For Training Purposes
-folder = "/home/ayush/Autonomous_Algo/DATASET/Flodded_Road"
+folder = "/home/ayush/Autonomous_Algo/DATASET/Pedestrian_Road"
 
 # Preprocessing the Data
 data = preprocess_dataset(folder)
 
+batch_size = 8
+latents_list = []
+
+for i in range(0, len(data), batch_size):
+    batch = data[i:i+batch_size]
+    latent_batch = encoder(batch, training=False)
+    latents_list.append(latent_batch)
+
+latents = tf.concat(latents_list, axis=0)
+
 # Extracting the Latents
-latents = encoder(data) 
+# latents = encoder(data) 
 
 # Rehsaping it, coz it contains a extra dim
 latents = tf.reshape(latents, (latents.shape[0], -1))
@@ -61,6 +76,6 @@ latents = tf.reshape(latents, (latents.shape[0], -1))
 # Taking the Mean of the Latents
 class_signature = tf.reduce_mean(latents, axis=0)
 
-np.save("flood_signature.npy", class_signature.numpy())
+np.save("/home/ayush/Autonomous_Algo/Latent_layer/Signatures/pedestrianroad_signature.npy", class_signature.numpy())
 
-print("Saved: flood_signature.npy")
+print("Saved: pedestrian_signature.npy")
