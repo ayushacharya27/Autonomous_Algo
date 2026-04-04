@@ -170,7 +170,7 @@ Scene Data:
 """
 
 
-GEMINI_API_KEY="AIzaSyBP9CR23-gPSt6jaf6oHzkIgJgXCbSRpRs"
+GEMINI_API_KEY="Add Your Key"
 genai.configure(api_key=GEMINI_API_KEY)
 
 
