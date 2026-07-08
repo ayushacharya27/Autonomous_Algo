@@ -109,7 +109,11 @@ class AyushFed(fl.server.strategy.FedAvg):
 
 fl.server.start_server(
     server_address = "0.0.0.0:8000",
-    strategy = AyushFed(),
+    strategy = AyushFed(
+    fraction_fit=1.0,
+    min_fit_clients=1,
+    min_available_clients=1,
+),
 
     # Save After 5 Rounds
     config=fl.server.ServerConfig(num_rounds=5),

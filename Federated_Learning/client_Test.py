@@ -6,7 +6,7 @@ from import_datset import preprocess_dataset, split_dataset
 
 
 # Loading Data (The OG Cat Dataset)
-all_data = preprocess_dataset("/home/ayush/CAT_00")
+all_data = preprocess_dataset("/home/ayush/Autonomous_Algo/Architecture/DATASET/Flodded_Road")
 x_train, _ = split_dataset(all_data, test_ratio=0.2)
 
 # Well this is Always the Case to Import this
@@ -62,7 +62,7 @@ class AyushClient(fl.client.NumPyClient):
         print("Global Model Recieved RAHHHHHH!!!!!")
         model.set_weights(parameters)
 
-        batch_size = 4
+        batch_size = 1
         train_ds = (
             tf.data.Dataset.from_tensor_slices(x_train)
             .shuffle(1000)

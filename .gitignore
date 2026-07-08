@@ -7,3 +7,14 @@ venv/
 # --- Python ---
 __pycache__/
 *.pyc
+
+
+# ML / Keras / TensorFlow
+*.h5
+*.keras
+*.npy
+
+# Large Data Files
+*.csv
+*.zip
+*.tar.gz

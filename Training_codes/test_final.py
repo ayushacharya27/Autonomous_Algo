@@ -57,7 +57,7 @@ class ConvAutoencoder(tf.keras.Model):
         decoded = self.decoder(encoded)
         return decoded
 
-def test_on_image(image_path, model_path="cat_hq_model.keras"):
+def test_on_image(image_path, model_path="best_trained.keras"):
     
     # Reading the Image
     img = cv2.imread(image_path, 0) # Read as Grayscale
@@ -99,4 +99,4 @@ def test_on_image(image_path, model_path="cat_hq_model.keras"):
     
     plt.show()
 
-test_on_image("/home/ayush/Autonomous_Algo/Architecture/jero2.png")
+test_on_image("/home/ayush/Autonomous_Algo/Architecture/jero3.jpg")

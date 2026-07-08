@@ -74,4 +74,4 @@ def test_on_image(image_path, model_path="/home/ayush/Autonomous_Algo/Training_c
     plt.show()
 
 
-test_on_image("/home/ayush/Autonomous_Algo/Architecture/jero2.png")
+test_on_image("/home/ayush/Autonomous_Algo/DATASET/Pedestrian_Road/image (6).jpg")

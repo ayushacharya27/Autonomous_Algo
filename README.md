@@ -1,3 +1,147 @@
+# Self-Supervised Autonomous Driving Framework
+
+A self-supervised autonomous driving framework that combines Convolutional Autoencoders, Prototype-Based Latent Classification, Federated Learning, YOLO Object Detection, and LLM-based planning to recognize unseen road conditions and generate autonomous driving actions.
+
+---
+
+## Features
+
+- Self-Supervised Learning
+- Convolutional Autoencoder
+- Prototype-Based Classification
+- Federated Learning (Flower)
+- YOLO Object Detection
+- LLM-Based Planning
+- ROS 2 Integration
+- Edge Deployment
+
+---
+
+## Pipeline
+
+```text
+Camera
+   │
+   ▼
+Image Preprocessing
+   │
+   ▼
+Convolutional Autoencoder
+   │
+   ▼
+Latent Representation
+   │
+   ▼
+Prototype Matching
+   │
+   ▼
+Road Condition Classification
+   │
+   ▼
+LLM Planning
+   │
+   ▼
+Vehicle Commands
+```
+
+---
+
+## Requirements
+
+```text
+Python 3.12
+TensorFlow
+OpenCV
+NumPy
+Flower
+ROS 2 Jazzy
+Ultralytics YOLO
+Google Generative AI SDK
+```
+
+---
+
+## Project Structure
+
+```text
+Dataset/
+Training_codes/
+Latent_layer/
+Federated_Learning/
+ROS/
+YOLO/
+LLM/
+Signatures/
+Testing/
+```
+
+---
+
+## Model Details
+
+| Parameter | Value |
+|------------|-------|
+| Input Resolution | 256 × 256 |
+| Latent Space | 16 × 16 × 128 |
+| Classification | Cosine Similarity |
+| Current Classes | Clean Road, Dirty Road, Flood, Pedestrian Road, Pothole Road |
+
+---
+
+## Federated Learning
+
+- Framework: Flower
+- Strategy: FedAvg
+- Multiple Clients
+- Local Training
+- No Raw Data Sharing
+
+---
+
+## ROS Nodes
+
+- Camera Node
+- Latent Classifier Node
+- YOLO Detection Node
+- Planner Node
+- Serial Communication Node
+
+---
+
+## Future Work
+
+- Visual Odometry
+- PID Control
+- Hardware-in-the-Loop (HIL)
+- SLAM Integration
+- Multi-Vehicle Federated Learning
+- Real Vehicle Deployment
+
+---
+
+## All Files And it Order to be Run
+
+### Model Codes:
+```bash
+1. Model Inference/Testing: testExperiment.py(Takes 256*256 image and the best trained model).
+2. Model Training/Testing: conv2d_final.py(Epochs: 100, change_dataset_path).
+3. Model Helping Functions: import_datset.py(Takes Input and Preprocess it).
+4. Best Trained Model: best_trained.keras(in TRAINING_CODES).
+```
+
+### Latent_Layer Codes:
+```bash
+1. To Save Signatures(*.npy* files) from Dataset: latent_layer.py ( Change Path).
+2. To Test on the Files: latent_test_on_img.py (Give Path of picture and image, also it contains the LLM Layer too).
+```
+
+### Federated Learning Codes:
+```bash
+1. To Run the Server: Server.py(Just Run Once).
+2. To Run Clients: client_Test.py( Run a Minimum of 2 Clients).
+```
+
+
 ## All Terminologies Used In this
 ### 1. import_dataset.py
 It contains functions:
