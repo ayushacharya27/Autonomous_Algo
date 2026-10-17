@@ -1,5 +1,7 @@
 # Self-Supervised Autonomous Driving Framework
 
+chatgpt link: https://chatgpt.com/c/693ac674-b70c-8322-ad17-96c03900d480
+
 A self-supervised autonomous driving framework that combines Convolutional Autoencoders, Prototype-Based Latent Classification, Federated Learning, YOLO Object Detection, and LLM-based planning to recognize unseen road conditions and generate autonomous driving actions.
 
 ---
